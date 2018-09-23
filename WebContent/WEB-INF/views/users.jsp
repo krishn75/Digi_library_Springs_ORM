@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>Welcome to Register Page</h1>
-<form:form action="user_reg" method="post" modelAttribute="user">
+<form:form action="userreg" method="post" modelAttribute="user">
 <pre>
 userName: <form:input path="username" required="required" /><form:errors path="username"/>
 Email   : <form:input path="email" required="required"/><form:errors path="email"/>

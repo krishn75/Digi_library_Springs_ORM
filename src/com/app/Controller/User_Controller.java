@@ -27,7 +27,7 @@ public class User_Controller {
 		return "users";
 	}
 	
-	@PostMapping("/user_reg")
+	@PostMapping("/userreg")
 	public String User_register_insert(@ModelAttribute("user")Users u,Errors errors,ModelMap mp)
 	{
 		v.validate(u, errors);
@@ -36,6 +36,7 @@ public class User_Controller {
 			u.setApproved("NO");
 			int id=ius.Insert_User(u);
 			mp.addAttribute("msg", "Successfully registered with user id= "+id);
+			
 			return "success";
 
 		}

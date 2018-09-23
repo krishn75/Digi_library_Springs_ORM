@@ -16,9 +16,9 @@ public class Users {
 	@SequenceGenerator(name="userid",sequenceName="diglib_uid",allocationSize=1)
 	@Column(name="user_id",length=5)
 	private int uid;
-	@Column(name="username",length=10)
+	@Column(name="username",length=10,unique=true)
 	private String username;
-	@Column(name="password",length=10)
+	@Column(name="password",length=50)
 	private String password;
 	@Column(name="email",length=20)
 	private String email;
