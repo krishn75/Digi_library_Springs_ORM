@@ -20,7 +20,7 @@ public class Web_init extends AbstractAnnotationConfigDispatcherServletInitializ
 	@Override
 	protected String[] getServletMappings() {
 		// TODO Auto-generated method stub
-		return new String[] {"/mvc/*"};
+		return new String[] {"/"};
 	}
 
 }

@@ -18,7 +18,7 @@ public class Users {
 	private int uid;
 	@Column(name="username",length=10,unique=true)
 	private String username;
-	@Column(name="password",length=50)
+	@Column(name="password",length=200)
 	private String password;
 	@Column(name="email",length=20,unique=true)
 	private String email;

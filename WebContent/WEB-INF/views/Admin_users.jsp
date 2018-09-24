@@ -39,11 +39,11 @@ if (result_data != null) {
 		
 		<%		
 		
-		int id=(Integer)m.getUid();
+		String un=m.getUsername();
 		
 		%>
 		
-		<td><button><a href="approve?id=<%=id%>">update</a></button></td>
+		<td><button><a href="approve?un=<%=un%>">update</a></button></td>
 		</tr>
 		
 		

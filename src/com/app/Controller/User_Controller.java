@@ -1,11 +1,14 @@
 package com.app.Controller;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -13,6 +16,7 @@ import com.app.Service.Interfaces.IUser_service;
 import com.app.Validator.Validator_cls;
 import com.app.model.Books;
 import com.app.model.Category;
+import com.app.model.Issued_books;
 import com.app.model.Users;
 
 @Controller
@@ -62,19 +66,19 @@ public class User_Controller {
 	}
 
 	@GetMapping("/approve")
-	public String user_ApprovePage(@RequestParam("id") int id, ModelMap mp) {
+	public String user_ApprovePage(@RequestParam("un") String un, ModelMap mp) {
 
-		mp.addAttribute("user", ius.select_User(id));
+		mp.addAttribute("user", ius.select_User(un));
 		return "users_update_admin";
 	}
 
 	@PostMapping("/Approvereg")
 	public String User_Approve_insert(@ModelAttribute("user") Users u, Errors errors, ModelMap mp) {
+		int id = ius.Update_User(u);
+		
+		if (id>0) {
 
-		v.validate(u, errors);
-		if (!errors.hasErrors()) {
-
-			int id = ius.Update_User(u);
+			
 			mp.addAttribute("msg", "Successfully updated user ");
 
 			return "success";
@@ -143,5 +147,36 @@ public class User_Controller {
 		}
 
 	}
+	//user page
+	@GetMapping("/user")
+	public String user_Page() {
+		
+		return "User_Page";
+	}
+	//search books
+	@GetMapping("/books_list")
+	public String books_List(ModelMap mp) {
+		mp.addAttribute("data", ius.select_Books_list());
+		return "Books_search";
+	}
+	//issue book
+	@GetMapping("/Issue_Book/{bid}/{qty}")
+	public String issue_Book(			
+			@PathVariable("bid")int id,
+			@PathVariable("qty")int qty,
+			ModelMap mp) {
+		String un="";
+		
+		Issued_books i=new Issued_books();
+		i.setIid(ius.generate());
+		i.setBook_id(id);
+		i.setIusername(un);
+		i.setStatus("NOT RETURNED");
+		mp.addAttribute("msg", "Successfully issued book with id= "+ius.Issue_Book(i, qty));
+
+		
+		return "success";
+	}
+	
 
 }

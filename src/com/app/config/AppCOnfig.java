@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -28,6 +30,7 @@ import com.app.model.Users;
 @EnableWebMvc
 @ComponentScan(basePackages="com.app")
 @PropertySource("classpath:m.properties")
+@Import(Security_Config.class)
 public class AppCOnfig {
 	@Autowired
 	private Environment e;	
@@ -77,6 +80,11 @@ public class AppCOnfig {
 	public InternalResourceViewResolver ivr()
 	{
 		return new InternalResourceViewResolver("/WEB-INF/views/",".jsp");
+	}
+	
+	@Bean
+	public BCryptPasswordEncoder encoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 }

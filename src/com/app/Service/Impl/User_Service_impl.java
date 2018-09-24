@@ -10,6 +10,7 @@ import com.app.Dao.Interfaces.IUser_Dao;
 import com.app.Service.Interfaces.IUser_service;
 import com.app.model.Books;
 import com.app.model.Category;
+import com.app.model.Issued_books;
 import com.app.model.Users;
 
 
@@ -25,9 +26,9 @@ public class User_Service_impl implements IUser_service {
 	}
 	@Override
 	@Transactional(readOnly=true)
-	public Users select_User(int uid) {
+	public Users select_User(String un) {
 		
-		return i.select_User(uid);
+		return i.select_User(un);
 	}
 	@Override
 	@Transactional(readOnly=true)
@@ -60,6 +61,17 @@ public class User_Service_impl implements IUser_service {
 	public List<Category> select_cat_list() {
 		
 		return i.select_cat_list();
+	}
+	@Override
+	@Transactional(readOnly=true)
+	public List<Books> select_Books_list() {
+		
+		return i.select_Books_list();
+	}
+	@Override
+	@Transactional
+	public String Issue_Book(Issued_books ib, int qty) {
+		return i.Issue_Book(ib, qty);
 	}
 
 }

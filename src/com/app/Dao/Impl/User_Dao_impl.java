@@ -7,11 +7,13 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.app.Dao.Interfaces.IUser_Dao;
 import com.app.model.Books;
 import com.app.model.Category;
+import com.app.model.Issued_books;
 import com.app.model.Users;
 
 @Repository
@@ -19,14 +21,16 @@ public class User_Dao_impl implements IUser_Dao{
 
 	@Autowired
 	private SessionFactory sf;
+	@Autowired
+	private BCryptPasswordEncoder be;
 	@Override
 	public int Insert_User(Users u) {
-		
+		u.setPassword(be.encode(u.getPassword()));
 		return (int) sf.getCurrentSession().save(u);
 	}
 	@Override
-	public Users select_User(int uid) {
-		Users u=(Users) sf.getCurrentSession().createQuery("from "+Users.class.getName()+" where uid=:uid").setParameter("uid", uid).uniqueResult();
+	public Users select_User(String un) {
+		Users u=(Users) sf.getCurrentSession().createQuery("from "+Users.class.getName()+" where username=:un").setParameter("un", un).uniqueResult();
 		return u;
 	}
 	@Override
@@ -61,6 +65,23 @@ public class User_Dao_impl implements IUser_Dao{
 	public List<Category> select_cat_list() {
 		List<Category> l=(List<Category>) sf.getCurrentSession().createQuery("from "+Category.class.getName()).list();
 		return l;
+	}
+	@Override
+	public List<Books> select_Books_list() {
+		List<Books> l=(List<Books>) sf.getCurrentSession().createQuery("from "+Books.class.getName()).list();
+		return l;
+	}
+	@Override
+	public String Issue_Book(Issued_books i, int qty) {
+		Query q1=sf.getCurrentSession().createQuery("update " + Books.class.getName() + " set quantity= :qty where book_id=:bid");
+		q1.setParameter("qty", qty-1);
+		q1.setParameter("bid", i.getBook_id());
+		String id=(String) sf.getCurrentSession().save(i);
+		if(!id.equals("fff")) {
+		q1.executeUpdate();
+		}
+		
+		return id;
 	}
 
 }
