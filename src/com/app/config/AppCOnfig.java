@@ -17,6 +17,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.app.model.Books;
+import com.app.model.Category;
+import com.app.model.Issued_books;
+import com.app.model.Reserved_books;
 import com.app.model.Users;
 
 @Configuration
@@ -55,7 +59,7 @@ public class AppCOnfig {
 	public LocalSessionFactoryBean lsf()
 	{
 		LocalSessionFactoryBean lsf=new LocalSessionFactoryBean();
-		lsf.setAnnotatedClasses(Users.class);
+		lsf.setAnnotatedClasses(Users.class,Category.class,Books.class,Issued_books.class,Reserved_books.class);
 		lsf.setDataSource(bds());
 		lsf.setHibernateProperties(hbp());
 		return lsf;

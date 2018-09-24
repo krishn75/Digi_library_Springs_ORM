@@ -9,6 +9,8 @@
 
 <body>
 <a href="select">users</a><br><br>
+<a href="cat">Add Category</a><br><br>
+<a href="book">Add Book</a><br><br>
 
 
 </body>

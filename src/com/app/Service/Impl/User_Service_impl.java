@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.Dao.Interfaces.IUser_Dao;
 import com.app.Service.Interfaces.IUser_service;
+import com.app.model.Books;
+import com.app.model.Category;
 import com.app.model.Users;
 
 
@@ -37,6 +39,27 @@ public class User_Service_impl implements IUser_service {
 	@Transactional
 	public int Update_User(Users u) {
 		return i.Update_User(u);
+	}
+	@Override
+	@Transactional
+	public int Insert_cat(Category c) {
+		return i.Insert_cat(c);
+	}
+	@Override
+	@Transactional(readOnly=true)
+	public String generate() {
+		return i.generate();
+	}
+	@Override
+	@Transactional
+	public int Insert_Book(Books b) {
+		return i.Insert_Book(b);
+	}
+	@Override
+	@Transactional(readOnly=true)
+	public List<Category> select_cat_list() {
+		
+		return i.select_cat_list();
 	}
 
 }
