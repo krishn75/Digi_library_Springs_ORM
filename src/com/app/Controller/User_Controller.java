@@ -1,8 +1,11 @@
 package com.app.Controller;
 
-import javax.websocket.server.PathParam;
+import java.util.Collection;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
@@ -26,6 +29,23 @@ public class User_Controller {
 
 	@Autowired
 	private IUser_service ius;
+	//login module
+	@PostMapping("/home")
+	public String login_success(ModelMap mp) {
+		 
+		String un=SecurityContextHolder.getContext().getAuthentication().getName();
+		String auth=SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		if(auth.contains("ADMIN")) {
+			mp.addAttribute("msg", "Welcome ADMIN "+un );
+			return "Admin_Page";
+			
+		}
+		else if(auth.contains("USER")) {
+			mp.addAttribute("msg", "Welcome USER "+un );
+			return "User_Page";
+		}
+		return "success";
+	}
 
 	// user module
 	@GetMapping("/reg")
@@ -165,18 +185,38 @@ public class User_Controller {
 			@PathVariable("bid")int id,
 			@PathVariable("qty")int qty,
 			ModelMap mp) {
-		String un="";
+		String un=SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		Issued_books i=new Issued_books();
 		i.setIid(ius.generate());
 		i.setBook_id(id);
 		i.setIusername(un);
 		i.setStatus("NOT RETURNED");
-		mp.addAttribute("msg", "Successfully issued book with id= "+ius.Issue_Book(i, qty));
+		String msg=ius.Issue_Book(i, qty);
+		mp.addAttribute("msg", msg);
 
 		
 		return "success";
 	}
+	
+	//return books
+	@GetMapping("/return_page")
+	public String return_page(ModelMap mp) {
+		String un=SecurityContextHolder.getContext().getAuthentication().getName();
+		mp.addAttribute("data", ius.Return_books(un));
+		return "return_page";
+	}
+	@GetMapping("/Return_Book")
+	public String Return_Book_reg(@RequestParam("i")int id,
+			@RequestParam("q")int qty, ModelMap mp) {
+		String un=SecurityContextHolder.getContext().getAuthentication().getName();
+		String msg= ius.return_Book_reg(id, qty, un);
+			mp.addAttribute("msg", msg);
+			return "success";
+
+		
+		}
+	
 	
 
 }

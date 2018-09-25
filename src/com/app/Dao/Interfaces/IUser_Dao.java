@@ -19,6 +19,7 @@ public interface IUser_Dao {
 	public List<Category> select_cat_list();
 	public List<Books> select_Books_list();
 	public String Issue_Book(Issued_books i,int qty);
-	
+	public List<Books> Return_books(String un);
+	public String return_Book_reg(int id,int qty,String un);
 
 }

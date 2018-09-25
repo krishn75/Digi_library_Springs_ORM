@@ -12,8 +12,7 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="issued_books",
-uniqueConstraints=@UniqueConstraint(columnNames= {"iusername","book_id"}))
+@Table(name="issued_books")
 public class Issued_books {
 	@Id
 	@Column(name="id",table="issued_books",length=20)

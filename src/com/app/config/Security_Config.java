@@ -39,13 +39,14 @@ public class Security_Config extends WebSecurityConfigurerAdapter {
 		.antMatchers("/bookreg").hasAuthority("ADMIN")
 		.antMatchers("/books_list").hasAuthority("USER")
 		.antMatchers("/Issue_Book/{bid}/{qty}").hasAuthority("USER")
+		.antMatchers("/return_page").hasAuthority("USER")
+		.antMatchers("/Return_Book").hasAuthority("USER")
 		.anyRequest()
 		.authenticated()
 		.and()
 		
 
-		.formLogin()
-		
+		.formLogin()		
 		.successForwardUrl("/home")
 		.and()
 		

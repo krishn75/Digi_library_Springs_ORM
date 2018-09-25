@@ -73,5 +73,15 @@ public class User_Service_impl implements IUser_service {
 	public String Issue_Book(Issued_books ib, int qty) {
 		return i.Issue_Book(ib, qty);
 	}
+	@Override
+	@Transactional(readOnly=true)
+	public List<Books> Return_books(String un) {
+		return i.Return_books(un);
+	}
+	@Override
+	@Transactional
+	public String return_Book_reg(int id, int qty, String un) {
+		return i.return_Book_reg(id, qty, un);
+	}
 
 }
