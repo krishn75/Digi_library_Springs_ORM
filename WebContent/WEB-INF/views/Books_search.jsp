@@ -8,6 +8,7 @@
 <title>Books_Available</title>
 </head>
 <body><table border="1">
+<a href="logout">logout</a><br><br><br>
 <tr>
 
 <th>book_id</th>

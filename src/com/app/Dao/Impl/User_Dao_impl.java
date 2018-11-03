@@ -63,7 +63,7 @@ public class User_Dao_impl implements IUser_Dao {
 	@Override
 	public String generate() {
 		String prefix = "issue/resesrve";
-		int x = ((BigDecimal) sf.getCurrentSession().createNativeQuery("select diglib_i_r_id.nextval from dual")
+		int x = ((BigDecimal) sf.getCurrentSession().createNativeQuery("select nextval ('diglib_i_r_id')")
 				.uniqueResult()).intValue();
 		return prefix + x;
 	}

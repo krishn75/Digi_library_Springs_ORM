@@ -7,7 +7,9 @@
 <meta charset="ISO-8859-1">
 <title>Books_Available</title>
 </head>
-<body><table border="1">
+<body>
+<a href="logout">Logout</a><br><br><br>
+<table border="1">
 <tr>
 
 <th>book_id</th>

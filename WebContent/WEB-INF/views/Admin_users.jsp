@@ -8,6 +8,7 @@
 <title>users_list</title>
 </head>
 <body><table border="1">
+<a href="logout">Logout</a><br><br><br>
 <tr>
 <th>user_id</th>
 <th>username</th>

@@ -6,22 +6,46 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#username").change(function(){
+		$.ajax({
+			url:"checkId",
+			data:{eun:$("#username").val()},
+			success:function(resTxt){
+				$("#msg").text(resTxt);
+				if(resTxt!=""){
+					$("#username").val("");
+					$("#username").focus();
+				}
+					
+			}
+		});
+	});
+});
+</script>
+
 </head>
 <body>
+<div ng-controller="user_Controller">
 <h1>Welcome to Register Page</h1>
-<form:form action="userreg" method="post" modelAttribute="user">
+<form name="uform  method="post" >
 <pre>
-userName: <form:input path="username" required="required" /><form:errors path="username"/>
-Email   : <form:input path="email" required="required"/><form:errors path="email"/>
-Password: <form:password path="password" required="required"/> <form:errors path="password"/>
-Phno    : <form:input path="phno" required="required"/> <form:errors path="phno"/>
-<form:hidden path="role" value="" /> 
-<form:hidden path="approved" value="No"  /> 
+userName: <input ng-model="username" id="username" required="required"  /><errors path="username"/>
+Email   : <input ng-model="username" required="required"/><errors path="email"/>
+Password: <password ng-model="password" required="required"/> <errors path="password"/>
+Phno    : <input ng-model="phno" required="required"/> <errors path="phno"/>
+<hidden ng-model="role" value="" /> 
+<hidden ng-model="approved" value="No"  /> 
 
-<input type="submit" value="Create User"/>
+
+<button type="submit" ng-click="user()">save</button>
+<span id="msg"/>
 </pre>
 
-</form:form>
+</form>
 ${msg}
+</div>
 </body>
 </html>

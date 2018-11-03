@@ -1,11 +1,8 @@
 package com.app.Controller;
 
-import java.util.Collection;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
@@ -13,7 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.Service.Interfaces.IUser_service;
 import com.app.Validator.Validator_cls;
@@ -29,19 +29,29 @@ public class User_Controller {
 
 	@Autowired
 	private IUser_service ius;
-	//login module
+	
+	@Autowired
+	private UserDetailsService lds;
+	// login module
+
+	@GetMapping({ "/Login", "/" })
+	public String loginPage() {
+		return "login";
+	}
+	
+	
+
 	@PostMapping("/home")
 	public String login_success(ModelMap mp) {
-		 
-		String un=SecurityContextHolder.getContext().getAuthentication().getName();
-		String auth=SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-		if(auth.contains("ADMIN")) {
-			mp.addAttribute("msg", "Welcome ADMIN "+un );
+
+		String un = SecurityContextHolder.getContext().getAuthentication().getName();
+		String auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		if (auth.contains("ADMIN")) {
+			mp.addAttribute("msg", "Welcome ADMIN " + un);
 			return "Admin_Page";
-			
-		}
-		else if(auth.contains("USER")) {
-			mp.addAttribute("msg", "Welcome USER "+un );
+
+		} else if (auth.contains("USER")) {
+			mp.addAttribute("msg", "Welcome USER " + un);
 			return "User_Page";
 		}
 		return "success";
@@ -55,7 +65,7 @@ public class User_Controller {
 	}
 
 	@PostMapping("/userreg")
-	public String User_register_insert(@ModelAttribute("user") Users u, Errors errors, ModelMap mp) {
+	public String User_register_insert(@RequestBody Users u, Errors errors, ModelMap mp) {
 		v.validate(u, errors);
 		if (!errors.hasErrors()) {
 			u.setRole("");
@@ -95,10 +105,9 @@ public class User_Controller {
 	@PostMapping("/Approvereg")
 	public String User_Approve_insert(@ModelAttribute("user") Users u, Errors errors, ModelMap mp) {
 		int id = ius.Update_User(u);
-		
-		if (id>0) {
 
-			
+		if (id > 0) {
+
 			mp.addAttribute("msg", "Successfully updated user ");
 
 			return "success";
@@ -150,7 +159,7 @@ public class User_Controller {
 
 	@PostMapping("/bookreg")
 	public String book_insert(@ModelAttribute("book") Books b, Errors errors, ModelMap mp) {
-		
+
 		v.validate(b, errors);
 		if (!errors.hasErrors()) {
 
@@ -161,62 +170,69 @@ public class User_Controller {
 
 		} else {
 			mp.addAttribute("msg", "failed to regster try again after rectifying errors");
-			mp.addAttribute("cat", ius.select_cat_list());			
+			mp.addAttribute("cat", ius.select_cat_list());
 			return "books";
 
 		}
 
 	}
-	//user page
+
+	// user page
 	@GetMapping("/user")
 	public String user_Page() {
-		
+
 		return "User_Page";
 	}
-	//search books
+
+	// search books
 	@GetMapping("/books_list")
 	public String books_List(ModelMap mp) {
 		mp.addAttribute("data", ius.select_Books_list());
 		return "Books_search";
 	}
-	//issue book
+
+	// issue book
 	@GetMapping("/Issue_Book/{bid}/{qty}")
-	public String issue_Book(			
-			@PathVariable("bid")int id,
-			@PathVariable("qty")int qty,
-			ModelMap mp) {
-		String un=SecurityContextHolder.getContext().getAuthentication().getName();
-		
-		Issued_books i=new Issued_books();
+	public String issue_Book(@PathVariable("bid") int id, @PathVariable("qty") int qty, ModelMap mp) {
+		String un = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		Issued_books i = new Issued_books();
 		i.setIid(ius.generate());
 		i.setBook_id(id);
 		i.setIusername(un);
 		i.setStatus("NOT RETURNED");
-		String msg=ius.Issue_Book(i, qty);
+		String msg = ius.Issue_Book(i, qty);
 		mp.addAttribute("msg", msg);
 
-		
 		return "success";
 	}
-	
-	//return books
+
+	// return books
 	@GetMapping("/return_page")
 	public String return_page(ModelMap mp) {
-		String un=SecurityContextHolder.getContext().getAuthentication().getName();
+		String un = SecurityContextHolder.getContext().getAuthentication().getName();
 		mp.addAttribute("data", ius.Return_books(un));
 		return "return_page";
 	}
-	@GetMapping("/Return_Book")
-	public String Return_Book_reg(@RequestParam("i")int id,
-			@RequestParam("q")int qty, ModelMap mp) {
-		String un=SecurityContextHolder.getContext().getAuthentication().getName();
-		String msg= ius.return_Book_reg(id, qty, un);
-			mp.addAttribute("msg", msg);
-			return "success";
 
-		
+	@GetMapping("/Return_Book")
+	public String Return_Book_reg(@RequestParam("i") int id, @RequestParam("q") int qty, ModelMap mp) {
+		String un = SecurityContextHolder.getContext().getAuthentication().getName();
+		String msg = ius.return_Book_reg(id, qty, un);
+		mp.addAttribute("msg", msg);
+		return "success";
+
+	}
+
+	// ajax
+	@RequestMapping("/checkId")
+	public @ResponseBody String checkIdData(@RequestParam("eun") String eun) {
+		String msg = "";
+		Users u = ius.select_User(eun);
+		if (u != null) {
+			msg = eun + "  already exist in DB.";
 		}
-	
-	
+		return msg;
+	}
 
 }

@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<a href="logout">Logout</a><br><br><br>
 	<h1>Welcome to update Page</h1>
 	<form:form action="Approvereg" method="post" modelAttribute="user">
 		<pre>

@@ -28,11 +28,12 @@ public class Security_Config extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 		.antMatchers("/reg").permitAll()
 		.antMatchers("/userreg").permitAll()
+		.antMatchers("/checkId").permitAll()
 		.antMatchers("/admin").hasAuthority("ADMIN")
 		.antMatchers("/user").hasAuthority("USER")
-		.antMatchers("/select").permitAll()
-		.antMatchers("/approve").permitAll()
-		.antMatchers("/Approvereg").permitAll()
+		.antMatchers("/select").hasAuthority("ADMIN")
+		.antMatchers("/approve").hasAuthority("ADMIN")
+		.antMatchers("/Approvereg").hasAuthority("ADMIN")
 		.antMatchers("/cat").hasAuthority("ADMIN")
 		.antMatchers("/catreg").hasAuthority("ADMIN")
 		.antMatchers("/book").hasAuthority("ADMIN")
@@ -46,7 +47,11 @@ public class Security_Config extends WebSecurityConfigurerAdapter {
 		.and()
 		
 
-		.formLogin()		
+		.formLogin()
+		.loginPage("/Login").permitAll()
+		.loginProcessingUrl("/loginPros").permitAll()
+		.usernameParameter("username")
+		.passwordParameter("password")
 		.successForwardUrl("/home")
 		.and()
 		
@@ -55,7 +60,10 @@ public class Security_Config extends WebSecurityConfigurerAdapter {
 		.logoutSuccessUrl("/login?logout")
 		
 		.and()
-		.exceptionHandling().accessDeniedPage("/error");
+		.exceptionHandling().accessDeniedPage("/error")
+		
+		.and()
+		.csrf().disable();
 	}
 
 }

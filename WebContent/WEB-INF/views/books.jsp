@@ -9,6 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<a href="logout">Logout</a><br><br><br>
 <% 
 List<Category> l=(List<Category>)request.getAttribute("cat");
 %>

@@ -8,6 +8,7 @@
 
 
 <body>
+<a href="logout">Logout</a><br><br><br>
 <h1>${msg }</h1><br><br><br>
 <a href="select">users</a><br><br>
 <a href="cat">Add Category</a><br><br>
